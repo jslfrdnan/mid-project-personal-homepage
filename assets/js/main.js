@@ -67,18 +67,8 @@
   }
 
   /* ---------------------------------------------------------
-     Live clock + date stamp
+     Live clock
      --------------------------------------------------------- */
-  function stampDate() {
-    const stamp = document.querySelector('[data-date]');
-    if (!stamp) return;
-    const months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
-    ];
-    const now = new Date();
-    stamp.textContent = `© ${months[now.getMonth()]} ${now.getFullYear()}`;
-  }
 
   function runLiveClock() {
     const el = document.querySelector('[data-clock]');
@@ -268,7 +258,6 @@
      Init
      --------------------------------------------------------- */
   document.addEventListener('DOMContentLoaded', () => {
-    stampDate();
     runLiveClock();
     markActiveNav();
     runTypewriter();

@@ -99,12 +99,7 @@ img { max-width: 100%; display: block; }
   margin-right: 4px;
 }
 
-.date-stamp {
-  display: block;
-  margin-top: 12px;
-  color: var(--muted);
-  font-size: 11px;
-}
+
 
 /* =============================================
    Hero (Profile / Index)
@@ -278,7 +273,6 @@ img { max-width: 100%; display: block; }
   max-height: 220px;
 }
 
-.card-tag { color: var(--green); font-size: 12px; }
 .card-title {
   color: var(--yellow);
   font-size: 22px;
