@@ -100,6 +100,47 @@
   }
 
   /* ---------------------------------------------------------
+     Mobile nav toggle (hamburger)
+     --------------------------------------------------------- */
+  function bindNavToggle() {
+    const header = document.querySelector('.site-header');
+    const nav = header && header.querySelector('.nav');
+    if (!header || !nav) return;
+
+    const btn = document.createElement('button');
+    btn.className = 'nav-toggle';
+    btn.type = 'button';
+    btn.setAttribute('aria-label', 'Toggle navigation');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.innerHTML = '<span class="nav-toggle-bars" aria-hidden="true"></span>';
+    header.insertBefore(btn, nav);
+
+    function setOpen(open) {
+      nav.classList.toggle('is-open', open);
+      btn.classList.toggle('is-open', open);
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      setOpen(!nav.classList.contains('is-open'));
+    });
+
+    nav.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => setOpen(false));
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!nav.classList.contains('is-open')) return;
+      if (!nav.contains(e.target) && !btn.contains(e.target)) setOpen(false);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') setOpen(false);
+    });
+  }
+
+  /* ---------------------------------------------------------
      Scroll-to-top floating button
      --------------------------------------------------------- */
   function bindScrollTop() {
@@ -260,6 +301,7 @@
   document.addEventListener('DOMContentLoaded', () => {
     runLiveClock();
     markActiveNav();
+    bindNavToggle();
     runTypewriter();
     runReveal();
     runQuoteFetch();

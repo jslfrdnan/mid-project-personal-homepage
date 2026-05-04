@@ -99,6 +99,47 @@ img { max-width: 100%; display: block; }
   margin-right: 4px;
 }
 
+.nav-toggle {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--green);
+  font-family: inherit;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: border-color 0.2s ease;
+}
+.nav-toggle:hover { border-color: var(--green); }
+
+.nav-toggle-bars,
+.nav-toggle-bars::before,
+.nav-toggle-bars::after {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--green);
+  transition: transform 0.2s ease, top 0.2s ease, opacity 0.2s ease, background-color 0.2s ease;
+}
+.nav-toggle-bars {
+  position: relative;
+}
+.nav-toggle-bars::before,
+.nav-toggle-bars::after {
+  content: "";
+  position: absolute;
+  left: 0;
+}
+.nav-toggle-bars::before { top: -6px; }
+.nav-toggle-bars::after  { top: 6px; }
+
+.nav-toggle.is-open .nav-toggle-bars { background: transparent; }
+.nav-toggle.is-open .nav-toggle-bars::before { top: 0; transform: rotate(45deg); }
+.nav-toggle.is-open .nav-toggle-bars::after  { top: 0; transform: rotate(-45deg); }
+
 
 
 /* =============================================
@@ -485,6 +526,49 @@ img { max-width: 100%; display: block; }
   .hero-tag { font-size: 18px; }
   .gallery-grid { grid-template-columns: 1fr; }
   .thumb-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Phone / small-tablet navigation: hamburger toggle + slide-down panel */
+@media (max-width: 900px) {
+  .site-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    gap: 0;
+    padding: 16px 0 8px;
+  }
+
+  .nav-toggle { display: inline-flex; }
+
+  .nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 16px 18px;
+    z-index: 100;
+    text-align: left;
+    display: none;
+  }
+  .nav.is-open { display: block; }
+
+  .nav-list {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    justify-content: flex-start;
+  }
+  .nav-list a { font-size: 15px; }
+
+  .header-utils {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    justify-content: flex-start;
+  }
 }
 
 /* =============================================
