@@ -159,35 +159,65 @@
 
   /* ---------------------------------------------------------
      AJAX dynamic quote (home page)
-     fetches a random programming quote from a public API
+     Fetches the local quotes.json once, then cycles through
+     random picks (tech / philosophy / lord of the mysteries).
      --------------------------------------------------------- */
   function runQuoteFetch() {
     const card = document.querySelector('[data-quote]');
     if (!card) return;
+    const tagEl = card.querySelector('.quote-tag');
     const textEl = card.querySelector('.quote-text');
     const authorEl = card.querySelector('.quote-author');
     const refreshBtn = card.querySelector('.quote-refresh');
+
+    // resolve quotes.json relative to the document, so /pages/*.html
+    // resolves to ../assets/data/quotes.json correctly
+    const depth = window.location.pathname.split('/').filter(Boolean).length - 1;
+    const prefix = depth > 0 ? '../'.repeat(depth) : '';
+    const dataUrl = prefix + 'assets/data/quotes.json';
+
+    let quotes = [];
+    let lastIdx = -1;
+
+    function pickRandom() {
+      if (!quotes.length) return null;
+      if (quotes.length === 1) return quotes[0];
+      let i;
+      do { i = Math.floor(Math.random() * quotes.length); } while (i === lastIdx);
+      lastIdx = i;
+      return quotes[i];
+    }
+
+    function show(q) {
+      card.classList.remove('is-loading');
+      if (!q) {
+        if (tagEl) tagEl.textContent = '// daily.insight';
+        textEl.textContent = '"Stay curious. Keep building."';
+        authorEl.textContent = '— run it with live server first to view intended quotes';
+        return;
+      }
+      if (tagEl) tagEl.textContent = '// ' + (q.category || 'daily.insight');
+      textEl.textContent = '"' + q.quote + '"';
+      authorEl.textContent = '— ' + (q.author || 'unknown');
+    }
 
     function load() {
       card.classList.add('is-loading');
       textEl.textContent = 'fetching insight';
       authorEl.textContent = '';
-      fetch('https://dummyjson.com/quotes/random')
+      if (quotes.length) { show(pickRandom()); return; }
+      fetch(dataUrl)
         .then(r => {
           if (!r.ok) throw new Error('http ' + r.status);
           return r.json();
         })
         .then(data => {
-          card.classList.remove('is-loading');
-          textEl.textContent = '"' + data.quote + '"';
-          authorEl.textContent = '— ' + (data.author || 'unknown');
+          quotes = Array.isArray(data) ? data : (data.quotes || []);
+          show(pickRandom());
         })
-        .catch(() => {
-          card.classList.remove('is-loading');
-          textEl.textContent = '"Stay curious. Keep building."';
-          authorEl.textContent = '— offline cache';
-        });
+        .catch(() => show(null));
     }
+
     load();
     if (refreshBtn) refreshBtn.addEventListener('click', load);
   }
