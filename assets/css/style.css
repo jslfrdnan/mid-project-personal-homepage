@@ -535,40 +535,56 @@ img { max-width: 100%; display: block; }
     align-items: center;
     justify-content: space-between;
     position: relative;
-    gap: 0;
-    padding: 16px 0 8px;
+    gap: 12px;
+    padding: 18px 24px 14px;
   }
 
-  .nav-toggle { display: inline-flex; }
+  .brand { order: 1; flex-shrink: 0; }
 
-  .nav {
+  .nav-toggle {
+    display: inline-flex;
+    order: 3;
+    flex-shrink: 0;
+  }
+
+  /* Hoist .nav's children up so they become flex children of the header.
+     This lets the clock stay visible in the header while the link list
+     becomes a collapsible dropdown. */
+  .nav { display: contents; }
+
+  .header-utils {
+    order: 2;
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+    justify-content: center;
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+
+  .nav-list {
+    order: 4;
     position: absolute;
     top: 100%;
     left: 0;
     right: 0;
     background: var(--panel);
     border: 1px solid var(--border);
-    padding: 16px 18px;
+    padding: 16px 24px;
     z-index: 100;
-    text-align: left;
     display: none;
-  }
-  .nav.is-open { display: block; }
-
-  .nav-list {
     flex-direction: column;
     align-items: flex-start;
     gap: 14px;
     justify-content: flex-start;
   }
+  .nav.is-open .nav-list { display: flex; }
   .nav-list a { font-size: 15px; }
+}
 
-  .header-utils {
-    margin-top: 14px;
-    padding-top: 12px;
-    border-top: 1px solid var(--border);
-    justify-content: flex-start;
-  }
+@media (max-width: 520px) {
+  .site-header { padding: 16px 18px 12px; gap: 10px; }
+  .live-clock { font-size: 10px; }
 }
 
 /* =============================================
